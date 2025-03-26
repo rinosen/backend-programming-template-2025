@@ -2,6 +2,29 @@ const usersService = require('./users-service');
 const { errorResponder, errorTypes } = require('../../../core/errors');
 const { hashPassword } = require('../../../utils/password');
 
+async function login(request, response, next) {
+  try {
+    const { email, password } = request.body;
+
+    // Cek apakah email ada di database
+    const user = await usersService.getUserByEmail(email);
+    if (!user) {
+      throw errorResponder(errorTypes.UNAUTHORIZED, 'INVALID_CREDENTIALS');
+    }
+
+    // Cek apakah password cocok
+    const isPasswordValid = await passwordMatched(password, user.password);
+    if (!isPasswordValid) {
+      throw errorResponder(errorTypes.UNAUTHORIZED, 'INVALID_PASSWORD');
+    }
+
+    // Jika berhasil login, kirim response sukses
+    return response.status(200).json({ message: 'Login successful' });
+  } catch (error) {
+    return next(error);
+  }
+}
+
 async function getUsers(request, response, next) {
   try {
     const users = await usersService.getUsers();
@@ -191,7 +214,10 @@ async function deleteUser(request, response, next) {
   }
 }
 
+
+
 module.exports = {
+  login,
   getUsers,
   getUser,
   createUser,

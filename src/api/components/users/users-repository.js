@@ -1,5 +1,6 @@
 const { Users } = require('../../../models');
 
+
 async function getUsers() {
   return Users.find({});
 }

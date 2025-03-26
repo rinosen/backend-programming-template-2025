@@ -1,4 +1,9 @@
 const usersRepository = require('./users-repository');
+const bcrypt = require('bcrypt');
+
+async function getUserByEmail(email) {
+  return usersRepository.getUserByEmail(email);
+}
 
 async function getUsers() {
   return usersRepository.getUsers();
@@ -25,7 +30,10 @@ async function deleteUser(id) {
   return usersRepository.deleteUser(id);
 }
 
+
+
 module.exports = {
+  getUserByEmail,
   getUsers,
   getUser,
   emailExists,

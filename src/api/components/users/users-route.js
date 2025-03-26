@@ -7,6 +7,10 @@ const route = express.Router();
 module.exports = (app) => {
   app.use('/users', route);
 
+  // Login
+  route.post('/login', usersController.login);
+
+
   // Get list of users
   route.get('/', usersController.getUsers);
 
@@ -24,4 +28,5 @@ module.exports = (app) => {
 
   // Delete user
   route.delete('/:id', usersController.deleteUser);
+
 };
